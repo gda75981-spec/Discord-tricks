@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discord Tricks</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f4ff;--panel:#e6e8ff;--ink:#1b1d3a;--mute:#5c5f86;--accent:#5865f2;--accent-ink:#fff;--code:#dfe2ff;--ok:#1f9d74;--line:#cfd2f5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1d33;--panel:#26283f;--ink:#e9eafc;--mute:#9b9ec6;--accent:#7983f5;--accent-ink:#12132a;--code:#14152a;--ok:#4fd1a1;--line:#3a3d5e}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0}
+.wrap{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+nav{background:var(--panel);padding:20px 12px;position:sticky;top:0;height:100vh;overflow-y:auto}
+nav h1{font-size:22px;padding:0 10px 14px}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--mute);font:inherit;padding:7px 10px;border-radius:6px;cursor:pointer}
+nav button:hover{background:var(--bg);color:var(--ink)}
+nav button[aria-current="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+nav button:before{content:"# ";opacity:.6}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+main{padding:28px clamp(16px,4vw,48px);max-width:860px}
+.top{display:flex;gap:12px;align-items:end;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+h2{font-size:clamp(28px,5vw,44px);line-height:1.1}
+.sub{color:var(--mute);margin:6px 0 0}
+input[type=search]{width:100%;font:inherit;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);margin-bottom:22px}
+.msg{display:grid;grid-template-columns:40px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.av{width:40px;height:40px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-family:"Bricolage Grotesque",sans-serif}
+.msg h3{margin:0;font-size:17px}
+.msg p{margin:3px 0 0;color:var(--mute)}
+.tag{font-size:13px;color:var(--mute);margin-left:8px;font-weight:400}
+pre{margin:9px 0 0;background:var(--code);border-radius:8px;padding:10px 12px;display:flex;gap:10px;justify-content:space-between;align-items:flex-start;overflow-x:auto}
+code{font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+pre button{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;font:13px system-ui;padding:3px 9px;cursor:pointer}
+pre button.done{color:var(--ok);border-color:var(--ok)}
+.empty{color:var(--mute);padding:30px 0}
+:root[data-theme="dark"]{--bg:#1c1d33;--panel:#26283f;--ink:#e9eafc;--mute:#9b9ec6;--accent:#7983f5;--accent-ink:#12132a;--code:#14152a;--ok:#4fd1a1;--line:#3a3d5e}
+body{background:radial-gradient(900px 500px at 85% -10%,rgba(139,92,246,.22),transparent 60%),radial-gradient(700px 500px at 0% 100%,rgba(88,101,242,.18),transparent 60%),var(--bg);background-attachment:fixed}
+nav{background:color-mix(in srgb,var(--panel) 80%,transparent);backdrop-filter:blur(10px);border-right:1px solid var(--line)}
+nav h1{background:linear-gradient(90deg,#5865f2,#eb459e);-webkit-background-clip:text;background-clip:text;color:transparent}
+nav button:before{content:none}
+nav button{display:flex;align-items:center;gap:9px;transition:background .15s,transform .15s}
+nav button:hover{transform:translateX(3px)}
+nav button[aria-current="true"]{background:linear-gradient(90deg,#5865f2,#8b5cf6);color:#fff;box-shadow:0 6px 18px rgba(88,101,242,.4)}
+nav .ic{width:22px;text-align:center}
+nav .ct{margin-left:auto;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--bg);color:var(--mute)}
+nav button[aria-current="true"] .ct{background:rgba(255,255,255,.25);color:#fff}
+.top{display:block}
+.hero{position:relative;overflow:hidden;border-radius:22px;padding:30px clamp(18px,4vw,34px);color:#fff;background:linear-gradient(120deg,#5865f2,#8b5cf6 55%,#eb459e);box-shadow:0 18px 40px rgba(88,101,242,.35)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(40px);opacity:.55;pointer-events:none}
+.hero:before{width:240px;height:240px;background:#fff;top:-110px;right:-60px}
+.hero:after{width:200px;height:200px;background:#22d3ee;bottom:-120px;left:30%}
+.hero>*{position:relative}
+.hero .sub{color:rgba(255,255,255,.88)}
+.hero .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.hero .badges span{font-size:13px;padding:4px 12px;border-radius:99px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px)}
+#theme{position:absolute;top:14px;right:14px;border:0;border-radius:99px;padding:7px 12px;background:rgba(255,255,255,.22);color:#fff;font:inherit;cursor:pointer}
+#theme:hover{background:rgba(255,255,255,.35)}
+input[type=search]{margin-top:20px;padding:13px 16px;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.06);transition:box-shadow .2s,border-color .2s}
+input[type=search]:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(88,101,242,.25);outline:0}
+.msg{border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;background:color-mix(in srgb,var(--panel) 70%,transparent);animation:none;transition:transform .2s,box-shadow .2s,border-color .2s}
+.msg:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 28px rgba(88,101,242,.22)}
+.av{background:linear-gradient(135deg,#5865f2,#eb459e);color:#fff;border-radius:14px;font-size:18px}
+.tag{padding:1px 9px;border-radius:99px;background:var(--bg);border:1px solid var(--line)}
+pre{border:1px solid var(--line);border-left:4px solid var(--accent)}
+pre button{transition:background .15s,transform .15s}
+pre button:hover{background:var(--accent);color:var(--accent-ink);transform:scale(1.05)}
+kbd.hint{font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:5px;padding:0 6px;margin-left:6px;color:var(--mute)}
+@media(prefers-reduced-motion:no-preference){.hero:before{animation:drift 9s ease-in-out infinite alternate}.hero:after{animation:drift 12s ease-in-out infinite alternate-reverse}@keyframes drift{to{transform:translate(-40px,30px) scale(1.2)}}}
+@media(max-width:760px){nav{border-right:0;border-bottom:1px solid var(--line)}nav button:hover{transform:none}.hero{border-radius:16px}#theme{position:static;margin-bottom:12px}}
+@media(max-width:760px){
+.wrap{display:block}
+nav{position:static;height:auto;display:flex;gap:6px;overflow-x:auto;padding:12px}
+nav h1{display:none}
+nav button{width:auto;white-space:nowrap;flex:none}
+}
+@media(prefers-reduced-motion:no-preference){.msg{animation:in .25s ease both}@keyframes in{from{opacity:0}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav id="nav" aria-label="Categories"><h1>Discord Tricks</h1></nav>
+<main>
+<header class="hero">
+<button id="theme" type="button" aria-label="Switch light or dark theme">Theme</button>
+<h2 id="title"></h2><p class="sub" id="sub"></p>
+<div class="badges"><span>Markdown</span><span>Shortcuts</span><span>Voice</span><span>Mobile</span><span>Dev tools</span></div>
+</header>
+<input type="search" id="q" placeholder="Search every trick  (press / to focus)" aria-label="Search every trick">
+<div id="list"></div>
+</main>
+</div>
+<script>
+const CATS={
+"text-formatting":"Format your messages with markdown.",
+"shortcuts":"Keyboard shortcuts (Windows / Linux; use Cmd for Ctrl and Option for Alt on Mac).",
+"messages":"Get more out of every message.",
+"search":"Find anything with search filters.",
+"servers":"Organize servers and channels.",
+"voice-video":"Calls, streams and audio settings.",
+"mobile":"Tricks for the phone app.",
+"customize":"Make Discord yours.",
+"power-user":"Developer mode, IDs and slash commands."
+};
+const T=[
+["text-formatting","Bold, italic, underline","Wrap text in symbols. Combine them for bold italic.","**bold**  *italic*  ***both***  __underline__"],
+["text-formatting","Strikethrough","Cross text out.","~~crossed out~~"],
+["text-formatting","Spoilers","Hide text until someone clicks it. For files, tick \"Mark as spoiler\" when uploading.","||secret text||"],
+["text-formatting","Inline code","Show text in a monospace font.","`code`"],
+["text-formatting","Code blocks with colors","Add a language name after the opening backticks for syntax highlighting.","```js\nconsole.log('hi');\n```"],
+["text-formatting","Quotes","One line, or everything after the marker.","> one line\n>>> everything below is quoted"],
+["text-formatting","Headings and small text","Use # for headings (up to three levels) and -# for small subtext.","# Big\n## Medium\n### Small\n-# tiny note"],
+["text-formatting","Lists","Start lines with a dash or a number. Indent for sub-items.","- first\n- second\n1. step one\n2. step two"],
+["text-formatting","Masked links","Show text instead of a raw URL.","[click here](https://example.com)"],
+["text-formatting","Hide a link preview","Wrap a URL in angle brackets so no embed appears.","<https://example.com>"],
+["text-formatting","Escape formatting","Put a backslash before a symbol to show it literally.","\\*not italic\\*"],
+["text-formatting","Dynamic timestamps","Show a time that adjusts to each reader's timezone. Replace the number with a Unix timestamp. Endings: t, T, d, D, f, F, R (relative).","<t:1767225600:F>\n<t:1767225600:R>"],
+["text-formatting","Text faces","Type these slash commands, then send.","/shrug\n/tableflip\n/unflip"],
+["text-formatting","Italic action text","Make a message look like an action.","/me waves"],
+["shortcuts","Quick switcher","Jump to any channel, server or DM by typing its name.","Ctrl + K"],
+["shortcuts","Shortcut list","Show all keyboard shortcuts in the app.","Ctrl + /"],
+["shortcuts","Move between channels","Step through channels, or only unread ones with Shift.","Alt + Up / Down\nAlt + Shift + Up / Down"],
+["shortcuts","Move between servers","Step through your server list.","Ctrl + Alt + Up / Down"],
+["shortcuts","Mark as read","Clear unread status for the channel, or the whole server with Shift.","Esc\nShift + Esc"],
+["shortcuts","Edit your last message","Press Up in an empty message box.","Up arrow"],
+["shortcuts","New line without sending","Add a line break in a message.","Shift + Enter"],
+["shortcuts","Emoji, GIF and sticker pickers","Open each picker from the keyboard.","Ctrl + E (emoji)\nCtrl + G (GIF)\nCtrl + S (stickers)"],
+["shortcuts","Mute and deafen","Toggle your mic or all audio in a call.","Ctrl + Shift + M\nCtrl + Shift + D"],
+["shortcuts","Search the channel","Open the search box.","Ctrl + F"],
+["messages","Skip the delete confirmation","Hold Shift while clicking Delete.",""],
+["messages","Add many reactions fast","Hold Shift while clicking emoji in the picker so it stays open.",""],
+["messages","More message options","Hold Shift while opening the message menu to see extra actions like Copy ID.",""],
+["messages","Reply without pinging","When replying, click the @ON toggle in the reply bar to switch it to @OFF.",""],
+["messages","Mark as unread","Right-click a message and choose Mark Unread to come back to it later.",""],
+["messages","Silent messages","Start a message with @silent so it sends without a notification.","@silent Hey, read this when you're free"],
+["messages","Threads","Start a thread from any message to keep a side conversation out of the main channel.",""],
+["messages","Pin messages","Pin important messages so everyone can find them from the pin icon.",""],
+["messages","Upload quickly","Drag files into the window, or paste a copied image straight into the box.",""],
+["messages","Emoji autocomplete","Type a colon and two letters to get emoji suggestions.",":smi"],
+["search","Filter by person","Find messages from a user.","from:username"],
+["search","Filter by channel","Search within one channel.","in:general"],
+["search","Filter by content type","Find links, images, videos, files or embeds.","has:link\nhas:image\nhas:file"],
+["search","Filter by date","Find messages around a date.","before:2026-01-01\nafter:2026-01-01\nduring:2026-01"],
+["search","Pinned or mentions","Find pinned messages or ones that mention someone.","pinned:true\nmentions:username"],
+["servers","Server folders","Drag one server icon onto another to group them into a folder.",""],
+["servers","Mute a server or channel","Right-click it and choose a duration. You can also mute only @everyone pings.",""],
+["servers","Hide muted channels","Right-click the server and turn on Hide Muted Channels for a cleaner list.",""],
+["servers","Follow announcement channels","In an announcement channel, press Follow to get its posts in your own server.",""],
+["servers","Roles control access","Create roles with only the permissions needed, then give channel access by role.",""],
+["servers","AutoMod","In Server Settings, use AutoMod to block keywords and spam automatically.",""],
+["servers","Forum channels","Use forum channels for organized, post-style questions with tags.",""],
+["voice-video","Per-person volume","Right-click someone in a call and drag their volume slider. It goes up to 200%.",""],
+["voice-video","Push to talk","In Voice & Video settings, set a key so your mic only opens while you hold it.",""],
+["voice-video","Noise suppression","Turn on noise suppression in Voice & Video settings to cut background noise.",""],
+["voice-video","Share a screen or window","Share one window instead of your whole screen, and turn on audio sharing when needed.",""],
+["voice-video","Watch together","Share your screen in a voice channel so friends can watch with you.",""],
+["voice-video","Soundboard","Play short clips in a voice channel from the soundboard button.",""],
+["mobile","Swipe to reply","Swipe on a message to reply to it.",""],
+["mobile","Swipe between panels","Swipe from the left edge for servers and channels, and from the right for the member list.",""],
+["mobile","Long-press for options","Press and hold a message, server or user to open its menu.",""],
+["mobile","Notification settings per server","Long-press a server and set exactly which notifications you want.",""],
+["customize","Custom status with timer","Set a status and choose when it clears, like in 1 hour or today.",""],
+["customize","Themes and density","In Appearance, pick light or dark and switch message display to Compact.",""],
+["customize","Reduce motion","Turn on reduced motion in Accessibility to limit animations.",""],
+["customize","Per-server profile","Give yourself a different nickname and avatar in each server from its profile settings.",""],
+["customize","Customize link","Jump to server onboarding choices.","<id:customize>"],
+["power-user","Turn on Developer Mode","Settings > Advanced > Developer Mode. Then right-click users, channels and messages to Copy ID.",""],
+["power-user","Slash commands","Type / to see every command available in the channel, from Discord and from bots.","/"],
+["power-user","Message links","Right-click a message and Copy Message Link to point someone at it exactly.",""],
+["power-user","Webhooks","Create a webhook in channel settings so outside tools can post messages.",""]
+];
+const nav=document.getElementById("nav"),list=document.getElementById("list"),q=document.getElementById("q"),title=document.getElementById("title"),sub=document.getElementById("sub");
+let cur="all";
+const IC={all:"✨","text-formatting":"✍️",shortcuts:"⌨️",messages:"💬",search:"🔎",servers:"🗂️","voice-video":"🎧",mobile:"📱",customize:"🎨","power-user":"🛠️"};
+function mk(id,label){const b=document.createElement("button");b.dataset.id=id;
+const i=document.createElement("span");i.className="ic";i.textContent=IC[id];
+const l=document.createElement("span");l.textContent=label;
+const c=document.createElement("span");c.className="ct";c.textContent=id==="all"?T.length:T.filter(t=>t[0]===id).length;
+b.append(i,l,c);b.onclick=()=>{cur=id;q.value="";render();scrollTo({top:0,behavior:"smooth"})};nav.appendChild(b)}
+mk("all","all-tricks");Object.keys(CATS).forEach(k=>mk(k,k));
+const root=document.documentElement;
+document.getElementById("theme").onclick=()=>{const dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;root.dataset.theme=dark?"light":"dark"};
+addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement!==q){e.preventDefault();q.focus()}else if(e.key==="Escape"&&document.activeElement===q){q.blur()}});
+function render(){
+const term=q.value.trim().toLowerCase();
+nav.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",String(b.dataset.id===cur&&!term)));
+const showAll=cur==="all"||term;
+title.textContent=term?"Search results":showAll?"Every Discord trick":cur.replace("-"," ");
+sub.textContent=term?"":showAll?T.length+" tricks across "+Object.keys(CATS).length+" categories.":CATS[cur];
+list.textContent="";
+const items=T.filter(t=>(showAll||t[0]===cur)&&(!term||(t[1]+" "+t[2]+" "+t[3]).toLowerCase().includes(term)));
+if(!items.length){const e=document.createElement("p");e.className="empty";e.textContent="No tricks match. Try a shorter word.";list.appendChild(e);return}
+items.forEach(t=>{
+const m=document.createElement("div");m.className="msg";
+const av=document.createElement("div");av.className="av";av.textContent=t[1][0];
+const body=document.createElement("div");
+const h=document.createElement("h3");h.textContent=t[1];
+if(showAll){const s=document.createElement("span");s.className="tag";s.textContent="#"+t[0];h.appendChild(s)}
+const p=document.createElement("p");p.textContent=t[2];
+body.append(h,p);
+if(t[3]){const pre=document.createElement("pre"),c=document.createElement("code"),cb=document.createElement("button");
+c.textContent=t[3];cb.textContent="Copy";
+cb.onclick=()=>{(navigator.clipboard?navigator.clipboard.writeText(t[3]):Promise.reject()).then(()=>{cb.textContent="Copied";cb.className="done";setTimeout(()=>{cb.textContent="Copy";cb.className=""},1400)}).catch(()=>{cb.textContent="Select and copy"})};
+pre.append(c,cb);body.appendChild(pre)}
+m.append(av,body);list.appendChild(m)});
+}
+q.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
